@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pendaftaran Murid Baru TK (Online)</title>
+    <title>Pendaftaran Murid Baru TK (Siap Dapodik)</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
@@ -14,7 +14,7 @@
     <header class="bg-indigo-600 text-white py-6 shadow-md mb-8">
         <div class="container mx-auto px-4 text-center">
             <h1 class="text-3xl font-bold">Penerimaan Peserta Didik Baru (PPDB) TK</h1>
-            <p class="text-indigo-200 mt-1">Sistem Pendataan Terintegrasi Online</p>
+            <p class="text-indigo-200 mt-1">Sistem Pendataan Terintegrasi Cloud & Format Ekspor Impor Dapodik</p>
         </div>
     </header>
 
@@ -37,8 +37,8 @@
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Jenis Kelamin</label>
                         <select id="jk" required class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
                             <option value="">-- Pilih --</option>
-                            <option value="Laki-laki">Laki-laki</option>
-                            <option value="Perempuan">Perempuan</option>
+                            <option value="L">Laki-laki (L)</option>
+                            <option value="P">Perempuan (P)</option>
                         </select>
                     </div>
 
@@ -69,16 +69,17 @@
                             <select id="agama" required class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
                                 <option value="Islam">Islam</option>
                                 <option value="Kristen">Kristen</option>
-                                <option value="Katolik">Katolik</option>
+                                <option value="Katholik">Katholik</option>
                                 <option value="Hindu">Hindu</option>
-                                <option value="Buddha">Buddha</option>
+                                <option value="Budha">Budha</option>
                                 <option value="Khonghucu">Khonghucu</option>
+                                <option value="Lainnya">Lainnya</option>
                             </select>
                         </div>
                         <div>
                             <label class="block text-xs font-semibold text-slate-600 mb-1">Kewarganegaraan</label>
                             <select id="kewarganegaraan" required class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
-                                <option value="WNI">WNI</option>
+                                <option value="Indonesia (WNI)">Indonesia (WNI)</option>
                                 <option value="WNA">WNA</option>
                             </select>
                         </div>
@@ -112,7 +113,7 @@
                     </div>
 
                     <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Rombel (Kelompok)</label>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Rombel (Kelompok Belajar)</label>
                         <select id="rombel" required class="w-full px-3 py-2 text-sm border rounded-lg focus:ring-2 focus:ring-indigo-500 outline-none">
                             <option value="">-- Pilih Rombel --</option>
                             <option value="TK-A">TK - A (Usia 4 - 5 Tahun)</option>
@@ -131,10 +132,10 @@
             <div class="lg:col-span-2 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
                 <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-4">
                     <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
-                        <i class="fas fa-list text-indigo-600"></i> Data Pendaftar Realtime
+                        <i class="fas fa-list text-indigo-600"></i> Data Pendaftar (Realtime Cloud)
                     </h2>
                     <button id="btnExport" class="bg-emerald-600 hover:bg-emerald-700 text-white px-3 py-1.5 rounded-lg text-sm font-medium flex items-center gap-2 shadow">
-                        <i class="fas fa-file-excel"></i> Ekspor ke CSV
+                        <i class="fas fa-file-excel"></i> Ekspor Format Dapodik
                     </button>
                 </div>
 
@@ -143,7 +144,7 @@
                         <thead>
                             <tr class="bg-slate-100 text-slate-700 border-b">
                                 <th class="p-2">No</th>
-                                <th class="p-2">Nama</th>
+                                <th class="p-2">Nama Peserta Didik</th>
                                 <th class="p-2">JK</th>
                                 <th class="p-2">NIK</th>
                                 <th class="p-2">TTL</th>
@@ -179,7 +180,8 @@
             projectId: "murid-baru",
             storageBucket: "murid-baru.firebasestorage.app",
             messagingSenderId: "629010432398",
-            appId: "1:629010432398:web:f4dcad79d63d6feb27a4df"
+            appId: "1:629010432398:web:f4dcad79d63d6feb27a4df",
+            measurementId: "G-HH5TVJVK43"
         };
 
         // Inisialisasi Firebase
@@ -248,7 +250,7 @@
                 tr.innerHTML = `
                     <td class="p-2">${index++}</td>
                     <td class="p-2 font-semibold text-slate-800">${s.nama}</td>
-                    <td class="p-2">${s.jk === 'Laki-laki' ? 'L' : 'P'}</td>
+                    <td class="p-2">${s.jk}</td>
                     <td class="p-2">${s.nik}</td>
                     <td class="p-2">${s.tempatLahir}, ${s.tglLahir}</td>
                     <td class="p-2">${s.ibuKandung}</td>
@@ -279,26 +281,66 @@
             }
         }
 
-        // 4. Ekspor Data ke CSV
+        // 4. Ekspor Data ke CSV Sesuai Header Standar Impor Dapodik
         document.getElementById('btnExport').addEventListener('click', () => {
             if (Object.keys(localStudentsData).length === 0) {
                 alert('Tidak ada data untuk diekspor.');
                 return;
             }
 
-            let csvContent = "data:text/csv;charset=utf-8,";
-            csvContent += "Nama Lengkap,Jenis Kelamin,NIK,Tempat Lahir,Tanggal Lahir,Nama Ibu Kandung,Agama,Kewarganegaraan,Alamat,Desa,Kecamatan,Kabupaten,Provinsi,Rombel\n";
+            // Memakai BOM (\uFEFF) agar huruf/karakter dibaca rapi tanpa teracak oleh Microsoft Excel
+            let csvContent = "\uFEFF";
+            
+            // Header resmi standar format entri/impor Dapodik
+            const headers = [
+                "Nama Peserta Didik",
+                "Jenis Kelamin",
+                "NISN",
+                "NIK/No. KITAS",
+                "Tempat Lahir",
+                "Tanggal Lahir",
+                "Agama & Kepercayaan",
+                "Kewarganegaraan",
+                "Alamat Jalan",
+                "Desa/Kelurahan",
+                "Kecamatan",
+                "Kabupaten/Kota",
+                "Provinsi",
+                "Nama Ibu Kandung",
+                "Rombel Saat Ini"
+            ];
+            
+            csvContent += headers.join(",") + "\n";
 
             for (let id in localStudentsData) {
                 const s = localStudentsData[id];
-                let row = `"${s.nama}","${s.jk}","'${s.nik}","${s.tempatLahir}","${s.tglLahir}","${s.ibuKandung}","${s.agama}","${s.kewarganegaraan}","${s.alamat}","${s.desa}","${s.kecamatan}","${s.kabupaten}","${s.provinsi}","${s.rombel}"`;
-                csvContent += row + "\n";
+                
+                let row = [
+                    `"${s.nama}"`,
+                    `"${s.jk}"`,
+                    `""`, // NISN (dikosongkan untuk murid baru TK)
+                    `"'${s.nik}"`,
+                    `"${s.tempatLahir}"`,
+                    `"${s.tglLahir}"`,
+                    `"${s.agama}"`,
+                    `"${s.kewarganegaraan}"`,
+                    `"${s.alamat}"`,
+                    `"${s.desa}"`,
+                    `"${s.kecamatan}"`,
+                    `"${s.kabupaten}"`,
+                    `"${s.provinsi}"`,
+                    `"${s.ibuKandung}"`,
+                    `"${s.rombel}"`
+                ];
+                
+                csvContent += row.join(",") + "\n";
             }
 
-            const encodedUri = encodeURI(csvContent);
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
             const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Daftar_Murid_Baru_TK_Cloud.csv");
+            link.setAttribute("href", url);
+            link.setAttribute("download", "Export_Siswa_Baru_TK_Format_Dapodik.csv");
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
